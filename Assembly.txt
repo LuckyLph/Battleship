@@ -1,0 +1,12 @@
+internal static System.Reflection.Assembly AssemblyResolveHandler(object sender, ResolveEventArgs args)
+    {
+      string libPath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + System.IO.Path.DirectorySeparatorChar + "Lib" + System.IO.Path.DirectorySeparatorChar;
+      var assembly = System.Reflection.Assembly.LoadFrom(libPath + args.Name + ".dll");
+      return assembly;
+    }
+
+    static void Main(string[] args)
+    {
+      AppDomain.CurrentDomain.AssemblyResolve += AssemblyResolveHandler;
+      SubMain();
+    }

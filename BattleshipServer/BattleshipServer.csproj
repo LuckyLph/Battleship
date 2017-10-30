@@ -1,0 +1,93 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{C0A12123-C297-4913-BFC9-1234ADC3B115}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>BattleshipServer</RootNamespace>
+    <AssemblyName>BattleshipServer</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Code\Battleship\Debug\Debug.cs" />
+    <Compile Include="Code\Battleship\Model\Battleship\Boat.cs" />
+    <Compile Include="Code\Battleship\Model\Battleship\Player.cs" />
+    <Compile Include="Code\Battleship\Model\Enums\BoatType.cs" />
+    <Compile Include="Code\Battleship\Model\Battleship\Game.cs" />
+    <Compile Include="Code\Battleship\Model\Battleship\Grid.cs" />
+    <Compile Include="Code\Battleship\Model\Battleship\GridSquare.cs" />
+    <Compile Include="Code\Battleship\Model\Networking\Ban.cs" />
+    <Compile Include="Code\Battleship\Controller\BanHandler.cs" />
+    <Compile Include="Code\Battleship\Controller\Battleship.cs" />
+    <Compile Include="Code\Battleship\Model\Networking\Client.cs" />
+    <Compile Include="Code\Battleship\Model\Networking\ClientAuthenticator.cs" />
+    <Compile Include="Code\Battleship\Model\Networking\ClientCommunicationHandler.cs" />
+    <Compile Include="Code\Battleship\Model\Networking\ClientConnectionVerifyer.cs" />
+    <Compile Include="Code\Battleship\Model\Networking\ClientHandler.cs" />
+    <Compile Include="Code\Battleship\Model\Networking\ClientList.cs" />
+    <Compile Include="Code\Battleship\Model\Networking\ClientListener.cs" />
+    <Compile Include="Code\Battleship\Constants.cs" />
+    <Compile Include="Code\Battleship\Controller\Enums\ClientSideTransactionCode.cs" />
+    <Compile Include="Code\Battleship\Controller\Enums\ServerSideTransactionCode.cs" />
+    <Compile Include="Code\Battleship\Controller\Enums\ServerState.cs" />
+    <Compile Include="Code\Battleship\Model\Enums\ClientToValidateState.cs" />
+    <Compile Include="Code\Battleship\Model\Networking\PacketProtocolFactory.cs" />
+    <Compile Include="Code\Battleship\View\ConsoleView.cs" />
+    <Compile Include="Code\Battleship\View\Enums\IOType.cs" />
+    <Compile Include="Code\Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Data\BanList.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PacketProtocol\PacketProtocol.csproj">
+      <Project>{0aa60a25-a5ca-4920-9b74-e74a4b2ec10a}</Project>
+      <Name>PacketProtocol</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

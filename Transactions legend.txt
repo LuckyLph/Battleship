@@ -1,0 +1,26 @@
+Transaction ids:
+0 = Tour du joueur(recu)
+1 = Bateau du joueur manqué(envoi)
+2 = Bateau du joueur touché(envoi)
+3 = Bateau du joueur détruit(envoi)
+4 = Tour d'un ennemi(recu)
+5 = Bateau ennemi manqué(recu)
+6 = Bateau ennemi touché(recu)
+7 = Bateau ennemi détruit(recu)
+8 = Ennemi éliminé(recu)
+9 = Tir recu(recu)
+10 = Victoire(recu)
+11 = Défaite(recu)
+
+Format pour le serveur:
+Envoyés :
+= "{id}-X;Y" : Message standard(si un bateau du joueur est touché, si c'est a son tour de jouer ou bien si la partie est terminée)      
+= "Nom1;Nom2;Nom3;Nom4" : Message qui doit etre retourné apres que le serveur aille recu les coordonnées des bateaux
+= "true" : Message à répondre pour authentifier le nom d'utilisateur, puis le mot de passe
+       
+Recus:
+= "[X,Y;X,Y;X,Y;X,Y;X,Y;][X,Y;X,Y;X,Y;X,Y;][X,Y;X,Y;X,Y;][X,Y;X,Y;X,Y;][X,Y;X,Y;] : Positionnement des bateaux dans la grille par ordre de grosseur
+                                                                                    suivante : Carrier, Destroyer, Frigate, Submarine, Corvette
+= "{Grid};X,Y" : Grille sélectionnée sous forme d'entier de 1 à 3 et coodonnées du tir(id de la grille relatif au client, une conversion
+                 devra être faite afin d'inscrire le tir dans la bonne grille
+= "Username" et "Password" : Username et password de l'utilisateur sous forme de string standard.

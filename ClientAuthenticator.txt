@@ -1,0 +1,111 @@
+public void ValidateClient(Client clientToValidate, ClientList clients)
+    {
+      this.clientToValidate = clientToValidate;
+      this.clients = clients;
+      elapsedTimeInSeconds = 0;
+      timer.Start();
+
+      HandleClientTransaction(Constants.REQUEST_VALIDATION.ToString().Length, Constants.REQUEST_VALIDATION.ToString(), true);
+      results[0] = buffer.ToString();
+
+      HandleClientTransaction(Constants.REQUEST_VERSION.ToString().Length, Constants.REQUEST_VERSION.ToString(), true);
+      results[1] = buffer.ToString();
+
+      HandleClientTransaction(Constants.REQUEST_LOGIN.ToString().Length, Constants.REQUEST_LOGIN.ToString(), true);
+      results[2] = buffer.ToString();
+
+      if (results[0] != Constants.VALIDATION_NUMBER.ToString() ||
+          results[1] != Constants.VERSION.ToString())
+      {
+        state = ClientToValidateState.INVALID;
+      }
+      else if (!CheckIfNameIsAvailable(results[2]))
+      {
+        state = ClientToValidateState.NAME_INVALID;
+      }
+
+
+      if (state == ClientToValidateState.VALID)
+      {
+        timer.Stop();
+        clients.Add(clientToValidate);
+        ClientConnectedEventArg clientConnectedArgs = new ClientConnectedEventArg(clients.Get(clients.Count - 1));
+        OnClientConnected(clientConnectedArgs);
+      }
+      else if (state == ClientToValidateState.NAME_INVALID)
+      {
+        do
+        {
+          HandleClientTransaction(Constants.REQUEST_INVALID_NAME.ToString().Length, Constants.REQUEST_INVALID_NAME.ToString(), true);
+          string nameToValidate = buffer.ToString();
+          if (CheckIfNameIsAvailable(nameToValidate))
+          {
+            state = ClientToValidateState.VALID;
+          }
+        }
+        while (state == ClientToValidateState.NAME_INVALID);
+      }
+      else if (state == ClientToValidateState.INVALID)
+      {
+        HandleClientTransaction(Constants.INVALID_CLIENT_TYPE_TEXT.Length, Constants.INVALID_CLIENT_TYPE_TEXT, false);
+        clientToValidate.Socket.Close();
+      }
+      else if (state == ClientToValidateState.TIMED_OUT)
+      {
+        HandleClientTransaction(Constants.REQUEST_CLIENT_TIMED_OUT.ToString().Length, Constants.REQUEST_CLIENT_TIMED_OUT.ToString(), false);
+        clientToValidate.Socket.Close();
+      }
+    }
+
+    private bool CheckIfNameIsAvailable(string nameToCheck)
+    {
+      for (int i = 0; i < clients.Count; i++)
+      {
+        if (clients.Get(i).Name == nameToCheck)
+        {
+          return false;
+        }
+      }
+      return true;
+    }
+
+    private void HandleClientTransaction(int lengthPrefix, string message, bool isExpectingResponse)
+    {
+      try
+      {
+        clientToValidate.Socket.Send(Encoding.ASCII.GetBytes(lengthPrefix + message));
+        if (isExpectingResponse)
+        {
+          clientToValidate.Socket.Receive(buffer);
+          packetProtocol.DataReceived(buffer);
+        }
+      }
+      catch (Exception)
+      {
+        state = ClientToValidateState.INVALID;
+      }
+    }
+
+    private void OnMessageArrived(byte[] bytes)
+    {
+      bytes.CopyTo(buffer, 0);
+    }
+
+    private void OnTimerElapsed(object o, EventArgs arg)
+    {
+      if (elapsedTimeInSeconds >= Constants.VALIDATION_TIMEOUT_DELAY)
+      {
+        state = ClientToValidateState.TIMED_OUT;
+      }
+      else
+      {
+        elapsedTimeInSeconds++;
+      }
+        
+    }
+
+    protected virtual void OnClientConnected(ClientConnectedEventArg e)
+    {
+      ClientConnected.Invoke(this, e);
+    }
+  }
